@@ -1,0 +1,2 @@
+# OneBitBrowser
+This is the code for a simple prototype of a one bit browser. It uses a stepper motor to actuate a mechanism that can be in two states (and therefore the one bit). The project includes code for an Arduino board and the CC3000 WIFI shield by Adafruit, written in C++11 and compiled, via CMake using the AVR-GCC Toolchain. It also includes server side node.js code to communicate with the Arduino
