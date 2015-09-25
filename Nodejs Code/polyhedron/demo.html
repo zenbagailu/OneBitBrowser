@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script type='text/javascript'>
+
+	var ws=null;
+	var wsct=0;
+
+	function ToggleUD(){
+		ToggleUD.state=!ToggleUD.state;
+		ws.send(ToggleUD.state ? 'up':'down');
+		var element = document.getElementById('sendArea');
+  		element.innerHTML = ToggleUD.state ? 'up':'down';  
+		
+	}
+
+	window.onbeforeunload = function() {
+		//ws.onclose = function () {}; // disable onclose handler first
+		ws.close();
+	}
+
+	function StartWebSocket(){
+  		// The browser doesn't support WebSocket
+  		if (! 'WebSocket' in window){
+  			var element = document.getElementById('sendArea');
+  			element.innerHTML = 'WebSocket NOT supported by your Browser!';   
+  		}
+
+  		try{
+  			var host = top.location.hostname;
+  			ws = new WebSocket('ws://' + host + ':8001');
+  			++wsct; //it counts the number of wevsockets created...
+
+  			ws.onopen = function()
+  			{
+  				var element = document.getElementById('status');
+  				element.innerHTML = 'webSocket opened.';
+			};
+			ws.onmessage = function (evt) 
+			{
+				var element = document.getElementById('receivedArea'); 
+				var data=evt.data;
+				element.innerHTML = data;
+
+				if(data == 'sensor on'){
+					var selm = document.getElementById('sensorData'); 
+					selm.style.background='black';
+				}
+				else if(data == 'sensor off'){
+					var selm = document.getElementById('sensorData'); 
+					selm.style.background='white';
+				}
+
+			};
+			ws.onclose = function()
+			{ 
+				//--wsct;
+				if(--wsct==0){
+					var element = document.getElementById('status');
+					element.innerHTML = 'Connection is closed.'; 
+				}
+				
+			};
+
+		} catch(exception) {
+			var element = document.getElementById('status'); 
+			element.innerHTML = '<p>Error'+exception; 
+		}
+	}
+	</script>
+
+
+	<style type='text/css'>
+	.button {
+		border: 1px solid #006;
+		/*background: #FF;*/
+		width: 20em;  
+		height:10em;
+	}
+	/*.circle {
+	width: 100px;
+	height: 100px;
+	background: red;
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	border-radius: 50px;
+	}*/
+
+	/* this is just a square with rounded borders*/
+
+	/*#circle {
+	    width: 50px;
+	    height: 50px;
+	    -webkit-border-radius: 25px;
+	    -moz-border-radius: 25px;
+	    border-radius: 25px; 
+	}*/
+
+	.circle {
+	 	width: 10em;  
+	 	height: 10em;  
+	    -webkit-border-radius: 50%;
+	    -moz-border-radius: 50%;
+	    border-radius: 50%; 
+	}
+
+
+	</style>
+
+</head>
+
+<body>
+
+
+	<input type='button' value='Start WebSocket' name='startwebsocket' class='button' onClick='StartWebSocket(); return true'> 
+	<input type='button' value='SET TRUE/FALSE' name='turnButton' class='button'; onClick='ToggleUD(); this.style.background=ToggleUD.state? "#FF0000": "#00FF00"; this.value=ToggleUD.state? "FALSE": "TRUE"; return true'> 
+	<input type='button' value='Sensor Data' name='sensorData' id='sensorData' class='button circle' > 
+
+	<!-- <div style="width:100px;height:100px;border:1px solid #000;">This is a rectangle!</div> -->
+	<!-- <area shape="circle" coords="20,30,3" href="mercur.htm" alt="Mercury"> -->
+	<!-- <area href="../tags.html" alt="HTML tags" shape="circle" coords="50,50,39" />
+    <area href="../tags.html" alt="HTML tags" shape="rect" coords="31,49,189,81" /> -->
+
+   <!--  <div id="circle" background: red; ></div> -->
+
+   <!--  <span class="circle" background: red; ></span> -->
+
+
+
+	<br>
+
+Status: <span id='status'>No Info</span><br>
+Sent Data: <span id='sendArea'>Nothing Sent</span><br>
+ReceivedData: <span id='receivedArea'>Nothing Received</span><br>
+
+
+</body>
+</html>
