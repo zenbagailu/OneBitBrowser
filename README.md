@@ -1,4 +1,4 @@
 # OneBitBrowser
 This is the code for a simple prototype of a one bit browser. It uses a stepper motor to actuate a mechanism that can be in two states (and thus can represent a bit). The project includes code for an Arduino board and the CC3000 WIFI shield by Adafruit, written in C++11 and compiled via CMake using the AVR-GCC Toolchain. It also includes server side node.js code to communicate with the Arduino. 
 
-Someone may find interesting the code that allows the Arduino/CC3000 to access other computers through Bonjour, placed in: /Avr-Arduino Code/mdns. It is however written in C++11 (not compatible with Arduino code at this point). I have also used it as an exercise to test a few C++11 features with the AVR-GCC, so it is not necessarily the clearest or best written code.
+Someone may find interesting the code that allows the Arduino/CC3000 to access other computers through Bonjour, placed in: /Avr-ArduinoActuatorCode/mdns. It is however written in C++11, so it is not compatible with Arduino IDE at this point. I have also used it as an exercise to test a few C++11 features with the AVR-GCC, so it is not necessarily the clearest or best written code.
